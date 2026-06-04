@@ -43,6 +43,27 @@ AuraCap 是首个将 **GitHub Release 作为瞬态中间件**（Transient Middle
 - **输出长期可控**：统一写入 Markdown（如 `storage/timeline.md`），便于检索、归档、迁移与备份
 - **模型生态开放**：支持 OpenAI、Gemini、SiliconFlow、Anthropic、Groq、Mistral 等模型及平台
 
+### 设计理念：轻入口、短驻留、可生长的个人记忆
+
+AuraCap 的出发点不是“再做一个 AI 笔记 App”，而是一个更朴素的观察：让用户专门下载、学习并信任一个全新的记录工具很难；但在真实生活里，很多人早就养成了看到有用内容就截图、遇到重要想法就录音的习惯。
+
+问题在于，捕捉很容易，回看很难。大量截图和录音最终停留在相册或文件夹里，变成很少再被打开的碎片。AuraCap 想做的是顺着这个已经存在的习惯，把“截图 / 录音”自然接到“AI 理解”和“长期沉淀”上，而不是要求用户先迁移到一个新的中心化平台。
+
+因此，AuraCap 刻意把入口做轻：用 iOS Shortcuts 和 GitHub 官方 App 承接高频捕捉；把中转做短：GitHub Release Asset 只作为临时媒体通道，处理完成后即清理；把结果做开放：所有记录、洞察、摘要和索引都写入用户自己仓库里的 Markdown / JSON 文件。
+
+这背后是一种 AI 时代的数据价值观：数据可以经过工具，但不应该无理由停留在工具里；AI 可以帮助理解用户的生活切片，但不应该顺手夺走这些切片的所有权。
+
+AuraCap 的存储结构也不是简单地“把总结写进一个文件”。它把个人记忆分成几层：
+
+- `timeline`：每一次截图或录音形成的原子事件流
+- `insights`：从一天的记录里提取出的短周期信号
+- `summary`：跨越多天的纵向轨迹分析
+- `task_index`：面向未来检索、RAG 和二次处理的语义索引层
+
+今天，这些文件可以直接阅读、提交、同步和备份；明天，它们也可以被转换成数据库、向量索引、个人知识图谱或长期记忆 Agent 的数据源。
+
+换句话说，AuraCap 保存的不是截图本身，而是用户长期的注意力轨迹。那些今天看似无关的碎片，可能会在更长的时间尺度里重新连接，形成新的洞察、灵感和行动方向。
+
 <a name="unique-innovation-github-release-as-transient-middleware"></a>
 
 ### 架构设计：为什么选择 GitHub Release 作为"瞬态媒体中转站"
@@ -160,6 +181,27 @@ Choosing Shortcuts is not about being "cooler"—it's about lowering the barrier
 - **Flexible deployment**: Self-host a backend or rely solely on GitHub workflows; the latter requires no server
 - **Long-term control over output**: Everything written to Markdown (e.g. `storage/timeline.md`), easy to search, archive, migrate, and back up
 - **Open model ecosystem**: Supports OpenAI, Gemini, SiliconFlow, Anthropic, Groq, Mistral, and other models/platforms
+
+### Design Philosophy: Light Capture, Short Retention, Growing Personal Memory
+
+AuraCap did not start from the idea of building yet another AI note-taking app. It started from a simpler observation: asking users to download, learn, and trust a completely new recording tool is hard; but in real life, many people already take screenshots when they see something useful, or record audio when an important thought appears.
+
+The problem is that capture is easy, but returning to captured material is hard. Screenshots and recordings often stay in albums or folders as fragments that are rarely opened again. AuraCap follows this existing habit and connects “screenshot / recording” to “AI understanding” and “long-term consolidation,” instead of forcing users to migrate into a new centralized platform first.
+
+That is why AuraCap keeps the entry point light: iOS Shortcuts and the official GitHub app handle high-frequency capture. It keeps the relay short-lived: GitHub Release Assets act only as temporary media channels and are cleaned up after processing. It keeps the output open: records, insights, summaries, and indexes are written as Markdown / JSON files in the user's own repository.
+
+Behind this is a data philosophy for the AI era: data may pass through tools, but it should not stay inside tools without a reason. AI can help understand fragments of a user's life, but it should not quietly take ownership of those fragments.
+
+AuraCap's storage structure is also not just “write the summary into a file.” It separates personal memory into layers:
+
+- `timeline`: an atomic event stream created by each screenshot or recording
+- `insights`: short-cycle signals extracted from one day's records
+- `summary`: longitudinal trajectory analysis across multiple days
+- `task_index`: a semantic index layer for future retrieval, RAG, and secondary processing
+
+Today, these files can be read, committed, synced, and backed up directly. Tomorrow, they can be converted into databases, vector indexes, personal knowledge graphs, or the data source for a long-term memory agent.
+
+In other words, AuraCap does not merely save screenshots. It preserves a user's long-term attention trail. Fragments that seem unrelated today may reconnect across a longer time horizon and become new insights, inspiration, and directions for action.
 
 ### Architecture: Why Use GitHub Release as a "Transient Media Relay"
 
