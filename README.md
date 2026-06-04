@@ -25,7 +25,13 @@ AuraCap 是首个将 **GitHub Release 作为瞬态中间件**（Transient Middle
 
 ### 解决什么问题
 
-多数信息系统的记录与整理是两件事：当下来不及整理，事后很难回到现场。而大多数"零成本"方案的代价是暗中依赖第三方存储，或将你锁在特定平台。AuraCap 用一种"黑客精神"解开这个结：让 GitHub 自身的基础设施承担全部中转与处理，让"捕捉"天然通向"沉淀"，数据始终由你掌控。
+打开手机相册，里面躺了多少张“当时觉得有用”的截图和录音？网页里的金句、代码报错、群聊里的灵感、会议的碎碎念……我们本能地捕捉碎片，却也本能地遗忘它们。
+
+市面上不缺“AI 笔记工具”，但它们普遍面临两个困境：
+1. **迁移成本高**：强迫用户下载一个重应用、改变现有的捕捉习惯是非常困难的。
+2. **信任黑盒**：你必须把高度私密的相册或录音交由第三方 SaaS 服务器托管。
+
+AuraCap 用一种务实的“黑客精神”解开了这个结：**不造新 App，顺着你已有的习惯走。** 借用开发者和科技爱好者手机里早已装好的 GitHub 官方 App 作为可信入口，让 GitHub 自身的基础设施承担全部中转与计算，让“高频捕捉”天然通向“长期沉淀”，而数据的所有权自始至终锁在你自己的仓库里。
 
 ### 为什么选择 Shortcuts（快捷指令）作为入口
 
@@ -164,7 +170,11 @@ AuraCap is the first open-source project to implement **GitHub Release as Transi
 
 ### The Problem It Solves
 
-Most information tools split recording and organizing into two separate acts: you never have time to organize in the moment, and it's hard to return to the context later. Most "zero-cost" solutions quietly depend on third-party storage or lock your data into a platform. AuraCap resolves this with a touch of hacker ingenuity: GitHub's own infrastructure handles all the relay and processing, so "capture" naturally leads to "consolidation" — and you always own your data.
+Look at your phone's photo library — how many screenshots and recordings are buried there, capturing moments you thought were useful but never looked at again? Code errors, book quotes, fleeting inspirations, or meeting notes... we capture fragments by instinct, but we also abandon them by instinct.
+Existing "AI Note-taking apps" usually suffer from two critical pain points:
+	1.	High Adoption Cost: Forcing users to download a heavy new app and shift their deeply-ingrained capture habits is notoriously difficult.
+	2.	The Third-Party Black Box: You must hand over highly private screenshots and audio data to an untrusted SaaS server.
+AuraCap resolves this tension with a touch of practical hacker ingenuity: Don't build a new app; blend seamlessly into existing behaviors. By using the official GitHub Mobile Client — already installed on most developers' and tech enthusiasts' devices — as a trusted portal, AuraCap repurposes GitHub's own infrastructure to handle all relay and computation. "Capture" naturally leads to "consolidation," and you retain absolute data sovereignty over your repo.
 
 ### Why Shortcuts as the Entry Point
 
