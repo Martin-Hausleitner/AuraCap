@@ -80,6 +80,10 @@ AuraCap 可能是首个提出并实现 "GitHub Release as a Transient Middleware
 
 AuraCap 最终采取了一种些许"黑客精神"的方案：**利用 GitHub Release Assets 作为异步中转。**
 
+<p align="center">
+  <img src="docs/readme-visuals/02-transient-middleware-zh.png" alt="AuraCap 中文架构图：GitHub Release 不是归宿，而是瞬态中间件" width="100%">
+</p>
+
 1. **打破"静态发布"的刻板印象**：通常 Release 用于托管稳定的二进制包，但我将其视为一个 **带身份认证的临时对象存储（Object Storage）**。
 2. **利用 `asset_id` 建立信任链**：
    - iOS 端通过 API 将截图/录音上传至特定的 `Inbox` Release。
@@ -89,6 +93,10 @@ AuraCap 最终采取了一种些许"黑客精神"的方案：**利用 GitHub Rel
    - GitHub Actions 环境中自带 `GITHUB_TOKEN`，拥有拉取本仓库 Release Assets 的天然权限。
    - 处理脚本根据 `asset_id` 直接下载、处理、写入。
    - **闭环完成**：整个过程不产生额外的存储费用，不依赖第三方 API Key，且媒体流始终在 GitHub 安全边界内流动。
+
+<p align="center">
+  <img src="docs/readme-visuals/04-asset-lifecycle.png" alt="AuraCap Release Asset lifecycle: data passes through, it does not stay" width="100%">
+</p>
 
 ### 选择使用方式
 
@@ -221,6 +229,10 @@ The core design challenge was: **How can iOS Shortcuts and GitHub Actions pass l
 
 AuraCap's answer: **Use GitHub Release Assets as an asynchronous relay.**
 
+<p align="center">
+  <img src="docs/readme-visuals/03-transient-middleware-en.png" alt="AuraCap architecture: GitHub Release is not the destination, it is transient middleware" width="100%">
+</p>
+
 1. **Rethinking Release**: Instead of treating Release only as a place for stable binaries, we treat it as **authenticated temporary object storage**.
 2. **Trust chain via `asset_id`**:
    - iOS uploads screenshots/recordings to a dedicated Inbox Release via API.
@@ -230,6 +242,10 @@ AuraCap's answer: **Use GitHub Release Assets as an asynchronous relay.**
    - GitHub Actions has `GITHUB_TOKEN` with built-in permission to fetch the repo's Release Assets.
    - The processing script downloads, processes, and writes based on `asset_id`.
    - **Closed loop**: No extra storage cost, no third-party API keys, and the media flow stays within GitHub's security boundary.
+
+<p align="center">
+  <img src="docs/readme-visuals/04-asset-lifecycle.png" alt="AuraCap Release Asset lifecycle: uploading should not mean surrendering" width="100%">
+</p>
 
 ### Choose Your Mode
 
