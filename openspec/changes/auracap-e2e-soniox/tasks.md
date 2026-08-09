@@ -12,13 +12,13 @@
 - [ ] 2.4 Proof-Screenshots in `.proof/` (Shortcut am iPhone + Timeline-Eintrag)
 
 ## 3. Soniox-STT-Stufe
-- [ ] 3.1 Soniox-Client (async REST, route-lab-Muster) als Pipeline-Stufe
-- [ ] 3.2 Workflow nutzt `SONIOX_API_KEY`-Secret; Audio → Transkript → Timeline
+- [x] 3.1 Soniox-Client (async REST, route-lab-Muster) als Pipeline-Stufe
+- [x] 3.2 Workflow nutzt `SONIOX_API_KEY`-Secret; Audio → Transkript → Timeline (Code fertig; Workflow-Env via `apply-workflow-soniox-env.sh` — direkte .github/workflows-Edits vom CI-Kill-Switch geblockt)
 - [ ] 3.3 Lokaler Test der Stufe mit echter Audio-Datei
 
 ## 4. vcvm-Pipeline-Hook
-- [ ] 4.1 Hook Richtung transcribe-hub (vcvm-Diarization) dokumentiert
-- [ ] 4.2 Stub implementiert (deaktiviert per Default, env-gated)
+- [x] 4.1 Hook Richtung transcribe-hub (vcvm-Diarization) dokumentiert
+- [x] 4.2 Stub implementiert (deaktiviert per Default, env-gated)
 
 ## 5. Report
 - [ ] 5.1 AURACAP-E2E-REPORT.md (Variant-A, Inline-Proofs) committed + gepusht

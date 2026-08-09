@@ -18,6 +18,7 @@ from backend.app.services.prompt_router import (
 )
 from backend.app.services.sync_queue import enqueue as sync_enqueue
 from backend.app.services.timeline import append_timeline
+from backend.app.sync.transcribe_hub_adapter import forward_to_transcribe_hub
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,8 @@ class PipelineService:
         self.settings = settings
         self.providers = ProviderBundle(settings)
 
-    async def _extract_content(self, request: CaptureRequest) -> str:
+    async def _extract_content(self, request: CaptureRequest) -> tuple[str, str | None]:
+        """Returns (extracted_content, transcript). transcript is only set on the ASR path."""
         fallback_prompt = "Extract concise structured facts, actions, and context from the input."
 
         if request.media_type == MediaType.SCREENSHOT:
@@ -43,11 +45,12 @@ class PipelineService:
                 lang = locale_to_lang(request.locale)
             prompt_path = resolve_timeline_prompt(MediaType.SCREENSHOT, lang, self.settings)
             timeline_prompt = load_prompt(prompt_path, fallback_prompt)
-            return await self.providers.mm.analyze_multimodal(
+            extracted = await self.providers.mm.analyze_multimodal(
                 prompt=timeline_prompt,
                 mime_type=request.mime_type,
                 payload=request.payload_bytes,
             )
+            return extracted, None
 
         audio_mode = AudioMode(self.settings.audio_mode)
         if audio_mode == AudioMode.TRANSCRIBE_THEN_ANALYZE:
@@ -58,22 +61,32 @@ class PipelineService:
                 lang = locale_to_lang(request.locale)
             prompt_path = resolve_timeline_prompt(MediaType.AUDIO, lang, self.settings)
             timeline_prompt = load_prompt(prompt_path, fallback_prompt)
-            return await self.providers.text.analyze_text(prompt=timeline_prompt, text=transcript)
+            extracted = await self.providers.text.analyze_text(prompt=timeline_prompt, text=transcript)
+            return extracted, transcript
 
         # DIRECT_MULTIMODAL: always use request_locale
         lang = locale_to_lang(request.locale)
         prompt_path = resolve_timeline_prompt(MediaType.AUDIO, lang, self.settings)
         timeline_prompt = load_prompt(prompt_path, fallback_prompt)
-        return await self.providers.mm.analyze_multimodal(
+        extracted = await self.providers.mm.analyze_multimodal(
             prompt=timeline_prompt,
             mime_type=request.mime_type,
             payload=request.payload_bytes,
         )
+        return extracted, None
 
     async def process_capture(self, request: CaptureRequest) -> ProcessResult:
         request_id = datetime.now().astimezone().strftime("%Y%m%d%H%M%S%f")
         try:
-            extracted = await self._extract_content(request)
+            extracted, transcript = await self._extract_content(request)
+            trace = {
+                "transport_mode": request.transport_mode,
+                "mime_type": request.mime_type,
+                "payload_ref": request.payload_ref,
+                "request_id": request_id,
+            }
+            if transcript is not None:
+                trace["transcript"] = transcript
             entry = append_timeline(
                 settings=self.settings,
                 source=request.source,
@@ -82,12 +95,7 @@ class PipelineService:
                 locale=request.locale,
                 timezone=request.timezone,
                 metadata=request.metadata,
-                trace={
-                    "transport_mode": request.transport_mode,
-                    "mime_type": request.mime_type,
-                    "payload_ref": request.payload_ref,
-                    "request_id": request_id,
-                },
+                trace=trace,
                 timestamp=request.captured_at,
             )
 
@@ -109,6 +117,20 @@ class PipelineService:
                     artifact_path=str(self.settings.timeline_file),
                 ),
             )
+
+            if transcript is not None:
+                # Env-gated stub towards the vcvm diarization pipeline (transcribe-hub);
+                # no-op unless TRANSCRIBE_HUB_URL is set. See docs/TRANSCRIBE_HUB.md.
+                hub_result = await forward_to_transcribe_hub(
+                    capture_id=entry.id,
+                    media_type=request.media_type.value,
+                    mime_type=request.mime_type,
+                    transcript=transcript,
+                    locale=request.locale,
+                    captured_at=request.captured_at,
+                )
+                if hub_result is not None:
+                    sync_results.append(hub_result.model_dump())
 
             return ProcessResult(
                 request_id=request_id,

@@ -7,6 +7,7 @@ from backend.app.providers.google_provider import GoogleProvider
 from backend.app.providers.groq_provider import GroqProvider
 from backend.app.providers.mistral_provider import MistralProvider
 from backend.app.providers.openai_provider import OpenAIProvider
+from backend.app.providers.soniox_provider import SonioxProvider
 
 
 def build_provider(kind: str, settings: Settings) -> BaseProvider:
@@ -54,6 +55,13 @@ def build_provider(kind: str, settings: Settings) -> BaseProvider:
             text_model=settings.mistral_text_model,
             mm_model=settings.mistral_mm_model,
             asr_model=settings.mistral_asr_model,
+            timeout_seconds=settings.provider_timeout_seconds,
+        )
+    if kind == "soniox":
+        return SonioxProvider(
+            api_key=settings.soniox_api_key,
+            base_url=settings.soniox_base_url,
+            model=settings.soniox_model,
             timeout_seconds=settings.provider_timeout_seconds,
         )
     return MockProvider()

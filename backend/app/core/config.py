@@ -49,7 +49,7 @@ class Settings(BaseModel):
 
     text_provider: Literal["openai", "anthropic", "google", "groq", "mistral", "mock"] = "mock"
     mm_provider: Literal["openai", "anthropic", "google", "groq", "mistral", "mock"] = "mock"
-    asr_provider: Literal["openai", "google", "groq", "mistral", "mock"] = "mock"
+    asr_provider: Literal["openai", "google", "groq", "mistral", "soniox", "mock"] = "mock"
     unified_provider: Literal["", "openai", "google", "groq", "mistral", "mock"] = ""
 
     openai_api_key: str = ""
@@ -80,6 +80,10 @@ class Settings(BaseModel):
     mistral_text_model: str = "mistral-large-latest"
     mistral_mm_model: str = "pixtral-large-latest"
     mistral_asr_model: str = "voxtral-mini-latest"
+
+    soniox_api_key: str = ""
+    soniox_base_url: str = "https://api.soniox.com"
+    soniox_model: str = "stt-async-v5"
 
     provider_timeout_seconds: int = 120
 
