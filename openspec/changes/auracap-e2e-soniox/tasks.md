@@ -21,4 +21,4 @@
 - [x] 4.2 Stub implementiert (deaktiviert per Default, env-gated)
 
 ## 5. Report
-- [ ] 5.1 AURACAP-E2E-REPORT.md (Variant-A, Inline-Proofs) committed + gepusht
+- [x] 5.1 AURACAP-E2E-REPORT.md (Variant-A, Inline-Proofs) committed + gepusht
